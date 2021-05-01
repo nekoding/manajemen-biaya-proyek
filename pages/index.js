@@ -12,22 +12,19 @@ import {
     Button,
     Alert,
     AlertIcon,
-    AlertTitle,
     AlertDescription,
     CloseButton,
     Divider,
-    SlideFade,
     useDisclosure,
-    background,
     Modal,
     ModalOverlay,
     ModalContent,
     ModalHeader,
     ModalCloseButton,
     ModalBody,
-    ModalFooter, Code, Link
+    Link
 } from "@chakra-ui/react"
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import isNumeric from "validator/lib/isNumeric"
 
 export default function Home() {
@@ -48,6 +45,17 @@ export default function Home() {
     const [tcpi, setTcpi] = useState(0)
     const [cv, setCv] = useState(0)
 
+    useEffect(() => {
+        // calculate result
+        setPv(bac * (planCompleted/ 100))
+        setEv(bac * (actualCompleted / 100))
+        setSpi(ev / pv)
+        setSv(ev - pv)
+        setCpi(ev / ac)
+        setTcpi((bac - ev) / (bac - ac))
+        setCv(ev - ac)
+    })
+
     const calculate = () => {
         const validate = isNumeric(bac.toString())
             && isNumeric(ac.toString())
@@ -58,15 +66,6 @@ export default function Home() {
             setAlert(true)
             return 0;
         }
-
-        // calculate result
-        setPv(bac * (planCompleted/ 100))
-        setEv(bac * (actualCompleted / 100))
-        setSpi(ev / pv)
-        setSv(ev - pv)
-        setCpi(ev / ac)
-        setTcpi((bac - ev) / (bac - ac))
-        setCv(ev - ac)
 
         //Trigger modal
         onOpen()
